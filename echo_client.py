@@ -6,7 +6,7 @@ import argparse
 
 host = 'localhost'
 
-def echo_client(port):
+def echo_client(port, user_message):
   """ A simple echo client """
   # Create a TCP/IP socket
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,7 +17,7 @@ def echo_client(port):
   # Send data
   try:
     # Send data
-    message = "Test message. This will be echoed"
+    message = user_message
     print "Sending %s" % message
     sock.sendall(message)
     # Look for the response
@@ -33,14 +33,16 @@ def echo_client(port):
     print "Socket error: %s" %str(e)
   except Exception, e:
     print "Other exception: %s" %str(e)
-  
+
   finally:
     print "Closing connection to the server"
     sock.close()
 
-  if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Socket Server Example')
-    parser.add_argument('--port', action="store", dest="port", type=int, required=True)
-    given_args = parser.parse_args()
-    port = given_args.port
-    echo_client(port)
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser(description='Socket Server Example')
+  parser.add_argument('--port', action="store", dest="port", type=int, required=True)
+  parser.add_argument('--user_message', action="store", dest="user_message", type=str, required=False)
+  given_args = parser.parse_args()
+  port = given_args.port
+  user_message = given_args.user_message
+  echo_client(port, user_message)
